@@ -13,11 +13,6 @@ Clone the repository
 ```
 $ git clone github.com/syahidanAS/laravel-jwt-auth-boilerplate.git
 ```
-
-Enter into the `src` directory
-```
-$ cd src
-```
 Copy the config file and adjust the needs
 ```
 $ copy .env-example .env
