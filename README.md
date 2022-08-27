@@ -4,7 +4,7 @@
 This repository is used to speed up Restful API development using JWT authentication
 
 ## Stack Architechture
-1. PHP 9, Laravel
+1. PHP 8, Laravel
 2. Mysql or MariaDB
 3. Firebase JWT
 
