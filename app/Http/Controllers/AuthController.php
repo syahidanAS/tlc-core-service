@@ -21,6 +21,7 @@ class AuthController extends Controller
         $payload =[
             'name'      => $request->name,
             'email'     => $request->email,
+            'phone'     => $request->phone,
             'password'  => Hash::make($request->password)
         ];
 
