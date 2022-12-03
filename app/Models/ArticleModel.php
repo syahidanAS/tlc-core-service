@@ -14,6 +14,7 @@ class ArticleModel extends Model
         'body', 
         'slug',
         'image_uri',
+        'image_url',
         'published_at'
     ];
 }
