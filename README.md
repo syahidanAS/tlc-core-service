@@ -1,7 +1,5 @@
-# Laravel JWT Authentication Boilerplate
+# The Bright Learning Center Blog Service Core
 
-## Overview
-This repository is used to speed up Restful API development using JWT authentication
 
 ## Stack Architechture
 1. PHP 8, Laravel
