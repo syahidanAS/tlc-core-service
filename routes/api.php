@@ -8,6 +8,7 @@ use App\Http\Controllers\TestimonialController;
 use App\Http\Middleware\AuthenticateJWT;
 use App\Models\ArticleModel;
 use App\Models\FaqModel;
+use App\Models\TestimonialModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,7 @@ Route::middleware([AuthenticateJWT::class])->group(function(){
     //Testimonials Activity
     Route::post('/testimonials', [TestimonialController::class,'store']);
     Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
+    Route::post('/update/testimonial', [TestimonialController::class, 'update']);
 });
 
 
