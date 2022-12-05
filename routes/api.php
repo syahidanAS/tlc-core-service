@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\TestimonialController;
@@ -57,6 +58,9 @@ Route::middleware([AuthenticateJWT::class])->group(function(){
     Route::post('/testimonials', [TestimonialController::class,'store']);
     Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
     Route::post('/update/testimonial', [TestimonialController::class, 'update']);
+
+    //Banners Activity
+    Route::post('/banners', [BannerController::class, 'store']);
 });
 
 
@@ -75,3 +79,7 @@ Route::get('/faqs/search', [FaqController::class, 'search']);
 
 //Testimonials
 Route::get('/testimonials', [TestimonialController::class, 'index']);
+
+
+//Banners
+Route::get('/banners', [BannerController::class, 'index']);
