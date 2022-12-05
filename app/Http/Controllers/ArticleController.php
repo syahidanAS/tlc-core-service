@@ -270,12 +270,23 @@ class ArticleController extends Controller
             'message' => 'Something went wrong',
         ], 500);
 
-
-
         // $extractedToken = explode(' ', $request->header('Authorization'))[1];
         // $decoded = JWT::decode($extractedToken, new Key(env('JWT_SECRET'), 'HS256'));
 
         // $uid = User::where('id', $decoded->uid)->first();
 
+    }
+
+    public function publish(Request $request){
+        $result = ArticleModel::where('slug', $request->slug)->update(["published_at" => $request->published_at]);
+
+        if($result){
+            return response()->json([
+                'message' => 'article successfully published',
+            ], 200);
+        }
+        return response()->json([
+            'message' => 'Something went wrong',
+        ], 500);
     }
 }

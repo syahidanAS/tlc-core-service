@@ -42,11 +42,13 @@ Route::middleware([AuthenticateJWT::class])->group(function(){
     Route::delete('/category/{id}', [CategoryController::class, 'destroy']);
 
     //Article Activity
+    Route::get('/articles', [ArticleController::class, 'get']);
     Route::post('/article', [ArticleController::class, 'store']);
     Route::get('/articles/{slug}', [ArticleController::class, 'getBySlug']);
     Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
     Route::post('/articles', [ArticleController::class, 'update']);
     Route::get('/search', [ArticleController::class, 'universalSearch']);
+    Route::post('/articles/publish', [ArticleController::class, 'publish']);
 
     //FAQs Activity
     Route::post('/faqs', [FaqController::class, 'store']);
@@ -70,7 +72,6 @@ Route::middleware([AuthenticateJWT::class])->group(function(){
 Route::get('/categories', [CategoryController::class, 'get']);
 
 //Articles
-Route::get('/articles', [ArticleController::class, 'get']);
 Route::get('/published/articles', [ArticleController::class, 'getPublished']);
 Route::get('/published-articles/search', [ArticleController::class, 'publishedSearch']);
 Route::get('/published/articles/{category_id}', [ArticleController::class, 'getPublishedByCategory']);
