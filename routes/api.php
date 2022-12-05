@@ -62,6 +62,7 @@ Route::middleware([AuthenticateJWT::class])->group(function(){
     //Banners Activity
     Route::post('/banners', [BannerController::class, 'store']);
     Route::delete('/banners/{id}', [BannerController::class, 'destroy']);
+    Route::post('/update/banners', [BannerController::class, 'update']);
 });
 
 
