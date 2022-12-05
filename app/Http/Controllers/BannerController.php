@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BannerModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class BannerController extends Controller
 {
@@ -52,5 +53,21 @@ class BannerController extends Controller
         return response()->json([
             'message' => 'something went wrong'
         ], 500); 
+    }
+
+    public function destroy($id){
+        $findUri = BannerModel::where('id', $id)->first();
+        $imagePath = public_path('banners/images/' . $findUri->image_uri);
+
+        $result = BannerModel::destroy($id);
+        if($result){
+            File::delete($imagePath);
+            return response()->json([
+                'message' => 'banner successfully deleted'
+            ], 200);
+        }
+        return response()->json([
+            'message' => 'something went wrong'
+        ], 500);
     }
 }
