@@ -3,8 +3,11 @@
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\TestimonialController;
 use App\Http\Middleware\AuthenticateJWT;
 use App\Models\ArticleModel;
+use App\Models\FaqModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -32,18 +35,41 @@ Route::middleware([AuthenticateJWT::class])->group(function(){
     //Category 
     Route::get('/me', [AuthController::class,'me']);
     Route::post('/category', [CategoryController::class, 'store']);
-    Route::get('/categories', [CategoryController::class, 'get']);
     Route::get('/category/{id}', [CategoryController::class, 'getById']);
     Route::put('/category', [CategoryController::class, 'update']);
     Route::delete('/category/{id}', [CategoryController::class, 'destroy']);
 
     //Article Activity
     Route::post('/article', [ArticleController::class, 'store']);
-    Route::get('/articles', [ArticleController::class, 'get']);
     Route::get('/articles/{slug}', [ArticleController::class, 'getBySlug']);
     Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
     Route::post('/articles', [ArticleController::class, 'update']);
+    Route::get('/search', [ArticleController::class, 'universalSearch']);
+
+    //FAQs Activity
+    Route::post('/faqs', [FaqController::class, 'store']);
+    Route::get('/faqs', [FaqController::class, 'get']);
+    Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
+    Route::put('/faqs', [FaqController::class, 'update']);
+
+    //Testimonials Activity
+    Route::post('/testimonials', [TestimonialController::class,'store']);
+    Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
 });
 
+
+//Categories
+Route::get('/categories', [CategoryController::class, 'get']);
+
+//Articles
+Route::get('/articles', [ArticleController::class, 'get']);
 Route::get('/published/articles', [ArticleController::class, 'getPublished']);
+Route::get('/published-articles/search', [ArticleController::class, 'publishedSearch']);
 Route::get('/published/articles/{category_id}', [ArticleController::class, 'getPublishedByCategory']);
+
+// Search FAQs
+Route::get('/faqs/search', [FaqController::class, 'search']);
+
+
+//Testimonials
+Route::get('/testimonials', [TestimonialController::class, 'index']);

@@ -69,17 +69,12 @@ class ArticleController extends Controller
             ->join('categories', 'article_category.category_id', 'categories.id')
             ->join('user_article', 'articles.id', '=', 'user_article.article_id')
             ->join('users', 'user_article.user_id', '=', 'users.id')
+            ->orderBy('articles.id', 'DESC')
             ->get();
-        $count = ArticleCategoryModel::selectRaw('articles.title, articles.body, articles.slug, articles.image_uri,articles.image_url, articles.published_at, users.name AS writer, categories.category')
-            ->join('articles', 'article_category.article_id', '=', 'articles.id')
-            ->join('categories', 'article_category.category_id', 'categories.id')
-            ->join('user_article', 'articles.id', '=', 'user_article.article_id')
-            ->join('users', 'user_article.user_id', '=', 'users.id')
-            ->count();
 
         if ($result) {
             return response()->json([
-                'message' => $count . ' Data successfully retrieved',
+                'message' => count($result) . ' Data successfully retrieved',
                 'data' => $result
             ], 200);
         }
@@ -97,18 +92,12 @@ class ArticleController extends Controller
             ->join('user_article', 'articles.id', '=', 'user_article.article_id')
             ->join('users', 'user_article.user_id', '=', 'users.id')
             ->whereNotNull('articles.published_at')
+            ->orderBy('articles.id', 'DESC')
             ->get();
-        $count = ArticleCategoryModel::selectRaw('articles.title, articles.body, articles.slug, articles.published_at, articles.image_uri,articles.image_url, articles.published_at, users.name AS writer, categories.category')
-            ->join('articles', 'article_category.article_id', '=', 'articles.id')
-            ->join('categories', 'article_category.category_id', 'categories.id')
-            ->join('user_article', 'articles.id', '=', 'user_article.article_id')
-            ->join('users', 'user_article.user_id', '=', 'users.id')
-            ->whereNotNull('articles.published_at')
-            ->count();
 
         if ($result) {
             return response()->json([
-                'message' => $count . ' Data successfully retrieved',
+                'message' => count($result) . ' Data successfully retrieved',
                 'data' => $result
             ], 200);
         }
@@ -117,33 +106,75 @@ class ArticleController extends Controller
         ], 500);
     }
 
-    public function getPublishedByCategory($category_id){
+    public function getPublishedByCategory($category_id)
+    {
         $result = ArticleCategoryModel::selectRaw('articles.title, articles.body, articles.slug, articles.published_at, articles.image_uri,articles.image_url, articles.published_at, users.name AS writer, categories.category')
-        ->join('articles', 'article_category.article_id', '=', 'articles.id')
-        ->join('categories', 'article_category.category_id', 'categories.id')
-        ->join('user_article', 'articles.id', '=', 'user_article.article_id')
-        ->join('users', 'user_article.user_id', '=', 'users.id')
-        ->where('categories.id', $category_id)
-        ->whereNotNull('articles.published_at')
-        ->get();
-    $count = ArticleCategoryModel::selectRaw('articles.title, articles.body, articles.slug, articles.published_at, articles.image_uri,articles.image_url, articles.published_at, users.name AS writer, categories.category')
-        ->join('articles', 'article_category.article_id', '=', 'articles.id')
-        ->join('categories', 'article_category.category_id', 'categories.id')
-        ->join('user_article', 'articles.id', '=', 'user_article.article_id')
-        ->join('users', 'user_article.user_id', '=', 'users.id')
-        ->where('categories.id', $category_id)
-        ->whereNotNull('articles.published_at')
-        ->count();
+            ->join('articles', 'article_category.article_id', '=', 'articles.id')
+            ->join('categories', 'article_category.category_id', 'categories.id')
+            ->join('user_article', 'articles.id', '=', 'user_article.article_id')
+            ->join('users', 'user_article.user_id', '=', 'users.id')
+            ->where('categories.id', $category_id)
+            ->whereNotNull('articles.published_at')
+            ->orderBy('articles.id', 'DESC')
+            ->get();
 
         if ($result) {
             return response()->json([
-                'message' => $count . ' Data successfully retrieved',
+                'message' => count($result) . ' Data successfully retrieved',
                 'data' => $result
             ], 200);
         }
         return response()->json([
             'message' => 'Something went wrong'
         ], 500);
+    }
+
+    //For Landing Page
+    public function publishedSearch(Request $request)
+    {
+        $result = ArticleCategoryModel::selectRaw('articles.title, articles.body, articles.slug, articles.published_at, articles.image_uri,articles.image_url, articles.published_at, users.name AS writer, categories.category')
+            ->join('articles', 'article_category.article_id', '=', 'articles.id')
+            ->join('categories', 'article_category.category_id', 'categories.id')
+            ->join('user_article', 'articles.id', '=', 'user_article.article_id')
+            ->join('users', 'user_article.user_id', '=', 'users.id')
+            ->where('articles.title', 'LIKE', "%{$request->title}%")
+            ->whereNotNull('articles.published_at')
+            ->orderBy('articles.id', 'DESC')
+            ->get();
+
+        if ($result) {
+            return response()->json([
+                'message' => count($result) . ' data successfully retrieved',
+                'data' => $result
+            ], 200);
+        }
+        return response()->json([
+            'message' => 'something went wrong'
+        ], 400);
+    }
+
+    //For CMS Purpose
+    public function universalSearch(Request $request)
+    {
+        $result = ArticleCategoryModel::selectRaw('articles.title, articles.body, articles.slug, articles.published_at, articles.image_uri,articles.image_url, articles.published_at, users.name AS writer, categories.category')
+            ->join('articles', 'article_category.article_id', '=', 'articles.id')
+            ->join('categories', 'article_category.category_id', 'categories.id')
+            ->join('user_article', 'articles.id', '=', 'user_article.article_id')
+            ->join('users', 'user_article.user_id', '=', 'users.id')
+            ->where('articles.title', 'LIKE', "%{$request->title}%")
+            ->orWhere('articles.body', 'LIKE', "%{$request->title}%")
+            ->orderBy('articles.id', 'DESC')
+            ->get();
+
+        if ($result) {
+            return response()->json([
+                'message' => count($result) . ' data successfully retrieved',
+                'data' => $result
+            ], 200);
+        }
+        return response()->json([
+            'message' => 'something went wrong'
+        ], 400);
     }
 
     public function getBySlug($slug)
@@ -155,21 +186,14 @@ class ArticleController extends Controller
             ->join('users', 'user_article.user_id', '=', 'users.id')
             ->where('articles.slug', $slug)
             ->get();
-        $count = ArticleCategoryModel::selectRaw('articles.title, articles.body, articles.slug, articles.image_uri,articles.image_url, articles.published_at, users.name AS writer, categories.category')
-            ->join('articles', 'article_category.article_id', '=', 'articles.id')
-            ->join('categories', 'article_category.category_id', 'categories.id')
-            ->join('user_article', 'articles.id', '=', 'user_article.article_id')
-            ->join('users', 'user_article.user_id', '=', 'users.id')
-            ->where('articles.slug', $slug)
-            ->count();
 
-        if ($count == 0) {
+        if (count($result) == 0) {
             return response()->json([
                 'message' => 'Article not found'
             ], 404);
         } else {
             return response()->json([
-                'message' => $count . ' Data successfully retrieved',
+                'message' => count($result) . ' Data successfully retrieved',
                 'data' => $result
             ], 200);
         }
