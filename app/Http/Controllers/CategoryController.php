@@ -26,7 +26,7 @@ class CategoryController extends Controller
     }
     //Get Categories
     public function get(){
-        $payload = CategoryModel::get();
+        $payload = CategoryModel::orderBy('id', 'DESC')->get();
         $counted = CategoryModel::count();
         if($payload){
             return response()->json([
